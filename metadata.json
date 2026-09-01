@@ -1,0 +1,10 @@
+{
+  "name": "NightDay",
+  "description": "A private journaling app where you write personal reflections and receive thoughtful, warm AI companion replies.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

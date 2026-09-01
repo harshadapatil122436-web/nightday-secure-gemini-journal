@@ -1,0 +1,77 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile document under users/{uid}",
+      "type": "object",
+      "properties": {
+        "displayName": { "type": "string", "description": "User display name" },
+        "email": { "type": "string", "description": "User email address" },
+        "createdAt": { "type": "string", "description": "ISO timestamp of user creation" }
+      },
+      "required": ["email", "createdAt"]
+    },
+    "JournalEntry": {
+      "title": "JournalEntry",
+      "description": "A personal journal entry under users/{uid}/journal_entries/{entryId}",
+      "type": "object",
+      "properties": {
+        "content": { "type": "string", "description": "Journal text" },
+        "mood": { "type": "string", "description": "Selected mood" },
+        "category": { "type": "string", "description": "Optional category" },
+        "date": { "type": "string", "description": "Date label or key" },
+        "timestamp": { "type": "string", "description": "ISO timestamp of entry creation" }
+      },
+      "required": ["content", "timestamp"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "AI companion conversation message under users/{uid}/chat_messages/{messageId}",
+      "type": "object",
+      "properties": {
+        "author": { "type": "string", "enum": ["user", "ai"], "description": "Author of message" },
+        "content": { "type": "string", "description": "Message text" },
+        "timestamp": { "type": "string", "description": "ISO timestamp of message" },
+        "mood": { "type": "string", "description": "Optional mood" }
+      },
+      "required": ["author", "content", "timestamp"]
+    },
+    "WeeklySummary": {
+      "title": "WeeklySummary",
+      "description": "Generated weekly summary under users/{uid}/summaries/{summaryId}",
+      "type": "object",
+      "properties": {
+        "generatedAt": { "type": "string", "description": "Generation timestamp" },
+        "dateRange": { "type": "string", "description": "Covered date range" },
+        "narrativeSummary": { "type": "string", "description": "Synthesis narrative" }
+      },
+      "required": ["generatedAt", "narrativeSummary"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "entity": "User",
+      "description": "User profile document"
+    },
+    "/users/{uid}/journal_entries/{entryId}": {
+      "entity": "JournalEntry",
+      "description": "User journal entries subcollection"
+    },
+    "/users/{uid}/entries/{entryId}": {
+      "entity": "JournalEntry",
+      "description": "Legacy and synced entries subcollection"
+    },
+    "/users/{uid}/chat_messages/{messageId}": {
+      "entity": "ChatMessage",
+      "description": "Companion conversation messages subcollection"
+    },
+    "/users/{uid}/summaries/{summaryId}": {
+      "entity": "WeeklySummary",
+      "description": "Weekly summaries subcollection"
+    },
+    "/users/{uid}/profile/{profileDocId}": {
+      "entity": "User",
+      "description": "User settings and profile subcollection"
+    }
+  }
+}
