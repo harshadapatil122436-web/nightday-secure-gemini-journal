@@ -1,18 +1,5 @@
 # 🌙 NightDay — Private AI Journal & Empathetic Reflection Companion
 
-<div align="center">
-
-![NightDay Banner](https://images.unsplash.com/photo-1517824806704-9040b037703b?q=80&w=1200&auto=format&fit=crop)
-
-**A private, distraction-free journaling space powered by Google Gemini, Google Cloud Secret Manager, and Firebase Firestore.**  
-*Write authentic personal reflections, track mood trends, receive empathetic companion feedback, and export real keepsake diary editions.*
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Google Cloud Run](https://img.shields.io/badge/Google%20Cloud-Run-4285F4?logo=googlecloud&logoColor=white)](https://cloud.google.com/run)
-[![Google Gemini API](https://img.shields.io/badge/Gemini%20API-3.6%20Flash-orange?logo=googlegemini&logoColor=white)](https://ai.google.dev/)
-[![Firebase Firestore](https://img.shields.io/badge/Firebase-Firestore-FFCA28?logo=firebase&logoColor=black)](https://firebase.google.com/)
-
-</div>
 
 ---
 
