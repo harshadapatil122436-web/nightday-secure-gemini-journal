@@ -147,4 +147,12 @@ export interface SecurityLogEvent {
   status: 'SUCCESS' | 'BLOCKED';
   details: string;
 }
+// vite.config.ts
+export default defineConfig(() => {
+  return {
+    base: './', // <-- Fixes blank screen on GitHub Pages subpaths
+    plugins: [react(), tailwindcss()],
+    // ...
+  };
+});
 
