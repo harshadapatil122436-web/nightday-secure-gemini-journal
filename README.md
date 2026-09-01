@@ -1,145 +1,49 @@
-# NightDay — AI-Powered Daily Journal & Reflection Companion
+# 🌙 NightDay — Private AI Journal & Empathetic Reflection Companion
 
-NightDay is a modern, privacy-first daily reflection and journaling application designed to help you capture your thoughts, track your moods, and reflect with an empathetic companion.
+<div align="center">
 
----
+![NightDay Banner](https://images.unsplash.com/photo-1517824806704-9040b037703b?q=80&w=1200&auto=format&fit=crop)
 
-## 🔒 Security & Secret Management Guide
+**A private, distraction-free journaling space powered by Google Gemini, Google Cloud Secret Manager, and Firebase Firestore.**  
+*Write authentic personal reflections, track mood trends, receive empathetic companion feedback, and export real keepsake diary editions.*
 
-When deploying or pushing this codebase to GitHub or other public repositories, follow these best practices to ensure **no API keys, tokens, or credentials are leaked**.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Google Cloud Run](https://img.shields.io/badge/Google%20Cloud-Run-4285F4?logo=googlecloud&logoColor=white)](https://cloud.google.com/run)
+[![Google Gemini API](https://img.shields.io/badge/Gemini%20API-3.6%20Flash-orange?logo=googlegemini&logoColor=white)](https://ai.google.dev/)
+[![Firebase Firestore](https://img.shields.io/badge/Firebase-Firestore-FFCA28?logo=firebase&logoColor=black)](https://firebase.google.com/)
 
-### 1. The `.gitignore` Setup
-The repository includes a `.gitignore` configured to prevent sensitive files and runtime secrets from being committed:
-
-```gitignore
-node_modules/
-dist/
-build/
-.DS_Store
-*.log
-.env*
-!.env.example
-service-account*.json
-firebase-adminsdk*.json
-```
-
-- **Never commit `.env` or `.env.local`**: Real API keys must live only in local `.env` files or platform secret managers.
-- **Commit `.env.example` only**: `.env.example` contains placeholder variable names without actual secrets.
-
-### 2. Environment Variables Configuration
-
-Copy `.env.example` to `.env` for local development:
-
-```bash
-cp .env.example .env
-```
-
-Set your values in `.env` (which is git-ignored):
-
-```env
-GEMINI_API_KEY="your-gemini-api-key-here"
-APP_URL="http://localhost:3000"
-```
-
-### 3. Google Cloud Secret Manager (for Production Deployments)
-
-For secure production hosting on Google Cloud Run without environment variable leaks:
-
-```bash
-# 1. Create and populate the secret in Secret Manager
-gcloud secrets create GEMINI_API_KEY --replication-policy="automatic"
-echo -n "YOUR_GEMINI_API_KEY" | gcloud secrets versions add GEMINI_API_KEY --data-file=-
-
-# 2. Grant Cloud Run runtime service account access to read the secret
-gcloud secrets add-iam-policy-binding GEMINI_API_KEY \
-  --member="serviceAccount:YOUR_PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
-  --role="roles/secretmanager.secretAccessor"
-```
+</div>
 
 ---
 
-## 🛡️ Cloud Firestore Security Rules
+## 📖 Overview
 
-To ensure user reflections and private data remain strictly isolated and accessible only to authenticated authors:
+**NightDay** is a full-stack daily journaling web application tailored for mindful self-reflection, emotional tracking, and memory preservation. It pairs an intuitive, distraction-free writing environment with **Luna** (an empathetic AI companion powered by Gemini) that provides constructive, warm perspectives without ever encroaching on personal journal exports.
 
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // User profile document isolation
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-      
-      // User interactions & journal entries subcollection
-      match /interactions/{interactionId} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
-      }
-    }
-  }
-}
-```
+### ✨ Key Features
+
+- ✍️ **Distraction-Free Journal Editor**: Rich mood tags, date pickers, audio voice-dictation recording, and photo attachments.
+- 🤖 **Resilient AI Companion (Luna)**: Server-side Gemini integration with automated multi-model fallback ladders (`gemini-3.6-flash` ➔ `gemini-3.1-flash-lite` ➔ `gemini-flash-latest` ➔ `gemini-3.7-flash`).
+- 🔒 **Zero-Trust Security Architecture**: Cloud Secret Manager integration, user-bound Firestore isolation rules, and zero client-side key leakage.
+- 📖 **Keepsake Diary Exporter**: Download single entries or entire volumes as styled HTML keepsake diary books, formatted text letters, or clean Markdown files.
+- 📊 **Emotional Insights & Analytics**: Visual charts for mood distributions, consistency streaks, and reflection word counts.
 
 ---
 
-## 🚀 How to Safely Push to GitHub
+## 🏛️ System Architecture
 
-Follow these steps before pushing your code:
-
-### Step 1: Check Git Status & Staged Files
-Verify that no secret files (e.g., `.env`, `.env.local`, service account JSONs) are staged:
-
-```bash
-git status
-```
-
-### Step 2: Check for Accidental API Keys in Code
-Run a quick search to ensure no hardcoded keys exist:
-
-```bash
-# Ensure no hardcoded keys exist
-git diff | grep -iE 'key|secret|token|password'
-```
-
-### Step 3: Add, Commit, and Push
-
-```bash
-git add .
-git commit -m "feat: setup NightDay reflection app with secure environment handling"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-git push -u origin main
-```
-
----
-
-## ☁️ Cloud Run Deployment Flow
-
-```bash
-# Build and deploy to Cloud Run
-gcloud run deploy nightday-app \
-  --source . \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --set-secrets=GEMINI_API_KEY=GEMINI_API_KEY:latest
-
-# Challenge verification label (if applicable)
-gcloud run services update nightday-app \
-  --update-labels=dev-tutorial=cloud-run-ai-challenge \
-  --region=us-central1
-```
-
----
-
-## 💻 Local Development
-
-```bash
-# Install dependencies
-npm install
-
-# Start local development server
-npm run dev
-
-# Build for production
-npm run build
-```
+```text
+┌────────────────────────────────────────────────────────┐
+│                   React 19 Frontend                    │
+│   (Vite + Tailwind CSS + Lucide Icons + Motion)        │
+└───────────────────────────┬────────────────────────────┘
+                            │ Bearer Token / HTTPS
+┌───────────────────────────▼────────────────────────────┐
+│                  Express Node.js Server                │
+│             (Type-safe ESM/CJS bundled backend)        │
+├───────────────────────────┬────────────────────────────┤
+│                           │                            │
+│  Google Cloud             │  Google Gemini API         │  Firebase Auth &
+│  Secret Manager           │  (@google/genai SDK)       │  Cloud Firestore
+│  (GEMINI_API_KEY)         │  (Empathetic Companion)   │  (Owner-bound data)
+└───────────────────────────┴────────────────────────────┘
